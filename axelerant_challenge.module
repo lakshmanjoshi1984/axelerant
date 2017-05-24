@@ -1,0 +1,52 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function axelerant_challenge_form_system_site_information_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+  //This modification will only work on site information form
+  $form['api_settings'] = [
+    '#type' => 'details',
+    '#title' => t('API Settings'),
+    '#open' => TRUE,
+  ];
+
+  $site_api = \Drupal::configFactory()->getEditable('system.site')->get('siteapikey');
+
+  $form['api_settings']['siteapikey'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Site Api key'),
+    '#default_value' =>  $site_api ? $site_api : t('No API Key yet'),
+  );
+
+  //Change Submit button name
+  if ($site_api) {
+    $form['actions']['submit']['#value'] = t('Update Configuration');
+  }
+
+  //Save this config data
+  $form['#submit'][] = 'axelerant_challenge_site_information_submit';
+}
+
+/**
+ * Save the config data
+ * @param $form
+ * @param FormStateInterface $form_state
+ */
+
+function axelerant_challenge_site_information_submit(&$form, FormStateInterface $form_state) {
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('siteapikey', $form_state->getValue('siteapikey'))
+    ->save();
+
+  if ($form_state->getValue('siteapikey')) {
+    drupal_set_message(t('Site API Key has been saved with this @value.', array('@value' =>
+      $form_state->getValue('siteapikey'))));
+  }
+
+}
+
