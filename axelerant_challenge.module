@@ -39,6 +39,7 @@ function axelerant_challenge_form_system_site_information_settings_alter(&$form,
  */
 
 function axelerant_challenge_site_information_submit(&$form, FormStateInterface $form_state) {
+
   \Drupal::configFactory()->getEditable('system.site')
     ->set('siteapikey', $form_state->getValue('siteapikey'))
     ->save();

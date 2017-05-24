@@ -21,9 +21,11 @@ class AxelerantChallengeController extends ControllerBase {
    */
 
   public function content($api_key, NodeInterface $node) {
+
     $output = array();
     $output = array('node' => $node->toArray());
     return new JsonResponse($output);
+
   }
 
   /**
@@ -35,13 +37,14 @@ class AxelerantChallengeController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultAllowed|\Drupal\Core\Access\AccessResultForbidden
    */
   public function axelerantNodeAccess($api_key, NodeInterface $node) {
+
     if (\Drupal::configFactory()->getEditable('system.site')->get('siteapikey') == $api_key && $node->getType() == 'page') {
       return AccessResult::allowed();
     }
+
     else {
       return AccessResult::forbidden();
     }
-
 
  }
 }
