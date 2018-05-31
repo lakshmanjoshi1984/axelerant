@@ -4,8 +4,7 @@ namespace Drupal\axelerant_challenge\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\node\NodeInterface;
-
+use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -20,8 +19,8 @@ class AxelerantChallengeController extends ControllerBase {
    * @return array
    */
 
-  public function content($api_key, NodeInterface $node) {
-
+  public function content($api_key, $nid) {
+    $node = Node::load($nid);
     $output = array();
     $output = array('node' => $node->toArray());
     return new JsonResponse($output);
@@ -36,12 +35,14 @@ class AxelerantChallengeController extends ControllerBase {
    *
    * @return \Drupal\Core\Access\AccessResultAllowed|\Drupal\Core\Access\AccessResultForbidden
    */
-  public function axelerantNodeAccess($api_key, NodeInterface $node) {
-
+  public function axelerantNodeAccess($api_key, $nid) {
+    $node = Node::load($nid);
+    if (!$node) {
+      return AccessResult::forbidden();
+    }
     if (\Drupal::configFactory()->getEditable('system.site')->get('siteapikey') == $api_key && $node->getType() == 'page') {
       return AccessResult::allowed();
     }
-
     else {
       return AccessResult::forbidden();
     }

@@ -1,1 +1,7 @@
-axelerant_challenge.render:  path: '/page_json/{api_key}/{node}'  defaults:    _controller: '\Drupal\axelerant_challenge\Controller\AxelerantChallengeController::content'    _title: 'Axelerant Challenge'  requirements:     _custom_access: '\Drupal\axelerant_challenge\Controller\AxelerantChallengeController::axelerantNodeAccess'     api_key: .+     node: \d+
+axelerant_challenge.render:
+  path: '/page_json/{api_key}/{nid}'
+  defaults:
+    _controller: '\Drupal\axelerant_challenge\Controller\AxelerantChallengeController::content'
+    _title: 'Axelerant Challenge'
+  requirements:
+    _custom_access: '\Drupal\axelerant_challenge\Controller\AxelerantChallengeController::axelerantNodeAccess'
